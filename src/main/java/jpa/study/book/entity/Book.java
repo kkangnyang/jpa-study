@@ -22,6 +22,10 @@ public class Book {
 	
 	private String title;
 	
+	/*
+	 * - 양방향 관계에서 Many 쪽이 관계의 주인
+	 * - 관계의 주인인 쪽에 관계가 설정되야 database에 반영된다.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "bsid")
 	private BookStore bookStore;

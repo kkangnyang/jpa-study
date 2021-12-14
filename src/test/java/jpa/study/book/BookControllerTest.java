@@ -20,6 +20,9 @@ class BookControllerTest {
 	@Autowired(required=true)
 	BookRepository bookRepository;
 	
+	/**
+	 * TODO 1. 양방향 연결을 하엿는데 왜 bookStore id 값은 insert 안될까?
+	 */
 	@Test
 	void test() {
 		BookStore bookStore = new BookStore();
