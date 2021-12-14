@@ -27,8 +27,12 @@ public class Member {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long mid;
+	@Column(name = "member_seq")
+	private long memberSeq;
 	
+	@Column
+	private String id;
+  
 	private String name;
 	
 	@ManyToOne
