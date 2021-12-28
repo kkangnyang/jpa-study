@@ -21,21 +21,17 @@ class MemberControllerTest {
 	
 	@Test
 	public void testSelect() {
-		Team team = new Team();
-		team.setName("New team 1");
+		Team team = new Team("New team 1");
 		Team savedTeam = teamRepository.save(team);
 		
-		Team team2 = new Team();
-		team2.setName("New team 2");
+		Team team2 = new Team("New team 2");
 		Team savedTeam2 = teamRepository.save(team2);
 		
-		Member member1 = new Member();
-		member1.setName("gayoung");
+		Member member1 = new Member("gayoung");
 		member1.setTeam(savedTeam);
 		memberRepository.save(member1);
 		
-		Member member2 = new Member();
-		member2.setName("gary");
+		Member member2 = new Member("gary");
 		member2.setTeam(savedTeam2);
 		memberRepository.save(member2);
 		

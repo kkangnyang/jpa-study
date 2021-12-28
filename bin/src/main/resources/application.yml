@@ -4,13 +4,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://flyingspur.dev:4100/gayoung_db?characterEncoding=UTF-8&serverTimezone=Asia/Seoul"
-    username: "root"
-    password: open1404
+    url: "jdbc:mysql://flyingspur.dev:4000/D_OPEN_DASHBOARD?characterEncoding=UTF-8&serverTimezone=Asia/Seoul"
+    username: "opendashboard"
+    password: open1404^-^
   jpa:
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    
     
     
