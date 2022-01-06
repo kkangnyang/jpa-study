@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import jpa.study.book.dto.MemberDto;
 import jpa.study.book.entity.Member;
+import jpa.study.book.entity.Team;
 /**
  * springdatajpa repository
  */
@@ -67,6 +68,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	
 	// native query
 	@Query(value = "select * from member where username = ?", nativeQuery = true)
-	Member findByNativeQuery(String username);
+	List<Member> findByNativeQuery(String username);
+	
+	@Query("select m.id from Member m where m.team.id = :tid")
+	String findMid(@Param("tid") Long tid);
+	
+	Member findByTeam(Team team);
 
 }

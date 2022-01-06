@@ -2,7 +2,6 @@ package jpa.study.book;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,16 +11,15 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
-import jpa.study.book.dto.MemberDto;
 import jpa.study.book.entity.Member;
 import jpa.study.book.entity.Team;
 import jpa.study.book.repository.MemberRepository;
@@ -49,7 +47,7 @@ public class MemberRepositoryTest {
 	// 실 동작 테스트
 	@Test
 	void testMember() {
-		Member member = new Member("memberA");
+		Member member = new Member("memberB");
 		Member savedMember = memberRepository.save(member);
 		
 		Member findMember = memberRepository.findById(savedMember.getId()).get();
@@ -281,7 +279,7 @@ public class MemberRepositoryTest {
 		List<Member> members = memberRepository.findAll();
 		// then
 		for (Member member : members) {
-			member.getTeam().getName();
+			//member.getTeam().getName();
 		}
 	}
 	
@@ -324,7 +322,41 @@ public class MemberRepositoryTest {
 	// native query
 	@Test
 	void findByNativeQuery () {
-		Member member = memberRepository.findByNativeQuery("BBB");
-		System.out.println(member.getUsername());
+		memberRepository.findByNativeQuery("BBB").forEach(System.out::println);
+	}
+	
+	@Test
+	void generatedTypeTest() {
+		Team teamA = new Team("teamA");
+		Member memberA = new Member("memberA", 30, teamA);
+		Member member = memberRepository.save(memberA);
+		System.out.println("id = " + member.getId());
+	}
+	
+	@BeforeEach
+	void beforeTest() {
+		Team teamB = new Team("teamB");
+		teamRepository.save(teamB);
+	}
+	
+	@Test
+	void generatedTypeBadTest() {
+		/*
+		 * Team teamB = new Team("teamB"); teamRepository.save(teamB);
+		 */
+		
+		Optional<Team> teamB = teamRepository.findById(1L);
+		
+		Member memberB = new Member("memberB", 30, teamB.get());
+		memberRepository.save(memberB);
+		
+		Member member = memberRepository.findByTeam(teamB.get());
+		System.out.println("id = " + member.getId());
+		
+		/*
+		 * String mid = memberRepository.findMid(teamB.getId());
+		 * 
+		 * System.out.println("id = " + mid);
+		 */
 	}
 }

@@ -11,6 +11,10 @@ spring:
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    
+    hibernate:
+      format_sql: true
+
+logging.level:
+  org.hibernate.SQL: trace
     
     
