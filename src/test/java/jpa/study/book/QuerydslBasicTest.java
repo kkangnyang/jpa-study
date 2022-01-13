@@ -734,4 +734,77 @@ class QuerydslBasicTest {
 	private BooleanExpression allEq(String usernameCond, Integer ageCond) {
 		return usernameEq(usernameCond).and(ageEq(ageCond));
 	}
+	
+	@Test
+	void bulkUpdate() {
+		
+		// 1 member1 = 10 -> 1 DB member1
+		// 2 member2 = 20 -> 2 DB member2
+		// 3 member3 = 30 -> 3 DB member3
+		// 4 member4 = 40 -> 4 DB member4
+		
+		long count = queryFactory
+				.update(QMember.member)
+				.set(QMember.member.username, "비회원")
+				.where(QMember.member.age.lt(28))
+				.execute();
+		
+		em.flush();
+		em.clear();
+		
+		// 1 member1 = 10 -> 1 DB 비회원
+		// 2 member2 = 20 -> 2 DB 비회원
+		// 3 member3 = 30 -> 3 DB member3
+		// 4 member4 = 40 -> 4 DB member4
+		
+		List<Member> result = queryFactory
+					.selectFrom(QMember.member).fetch();
+		
+		for (Member member : result) {
+			
+			System.out.println("member1 = " + member1);
+		}
+		
+	}
+	
+	@Test
+	void bulkAdd() {
+		long count = queryFactory
+			.update(QMember.member)
+			.set(QMember.member.age, QMember.member.age.multiply(2))
+			.execute();
+		
+	}
+	
+	@Test
+	void bulkDelete() {
+		long count = queryFactory
+			.delete(QMember.member)
+			.where(QMember.member.age.gt(18))
+			.execute();
+	}
+	
+	@Test
+	void sqlFunction() {
+		String result = queryFactory
+			.select(Expressions.stringTemplate("function('replace', {0}, {1}, {2})", 
+					QMember.member.username, "member", "M"))
+			.from(QMember.member)
+			.fetchFirst();
+	}
+	
+	@Test
+	void sqlFunction2() {
+		List<String> result = queryFactory
+			.select(QMember.member.username)
+			.from(QMember.member)
+//			.where(QMember.member.username.eq(
+//					Expressions.stringTemplate("function('lower', {0})", QMember.member.username)))
+			.where(QMember.member.username.eq(QMember.member.username.lower()))
+			.fetch();
+		
+		for (String s : result) {
+			System.out.println("s = " + s);
+		}
+	}
 }

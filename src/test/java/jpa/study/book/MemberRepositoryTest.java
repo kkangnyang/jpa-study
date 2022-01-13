@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
+import jpa.study.book.dto.MemberSearchContidion;
+import jpa.study.book.dto.MemberTeamDTO;
 import jpa.study.book.entity.Member;
 import jpa.study.book.entity.Team;
 import jpa.study.book.repository.MemberRepository;
@@ -358,5 +360,56 @@ public class MemberRepositoryTest {
 		 * 
 		 * System.out.println("id = " + mid);
 		 */
+	}
+	
+	@Test
+	public void searchTest() {
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		em.persist(teamA);
+		em.persist(teamB);
+		
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member2", 20, teamA);
+		Member member3 = new Member("member3", 30, teamB);
+		Member member4 = new Member("member4", 40, teamB);
+		em.persist(member1);
+		em.persist(member2);
+		em.persist(member3);
+		em.persist(member4);
+		
+		MemberSearchContidion condition = new MemberSearchContidion();
+		condition.setAgeGoe(35);
+		condition.setAgeLoe(40);
+		condition.setTeamName("teamB");
+		
+		List<MemberTeamDTO> result = memberRepository.search(condition);
+		assertThat(result).extracting("username").containsExactly("member4");
+	}
+	
+	@Test
+	public void searchPageSimple() {
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		em.persist(teamA);
+		em.persist(teamB);
+		
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member2", 20, teamA);
+		Member member3 = new Member("member3", 30, teamB);
+		Member member4 = new Member("member4", 40, teamB);
+		em.persist(member1);
+		em.persist(member2);
+		em.persist(member3);
+		em.persist(member4);
+		
+		MemberSearchContidion condition = new MemberSearchContidion();
+		PageRequest pageRequest = PageRequest.of(0, 3);
+		
+		Page<MemberTeamDTO> result = memberRepository.searchPageSimple(condition, pageRequest);
+		
+		assertThat(result.getSize()).isEqualTo(3);
+		assertThat(result.getContent()).extracting("username").containsExactly("member1", "member2", "member3");
+		
 	}
 }

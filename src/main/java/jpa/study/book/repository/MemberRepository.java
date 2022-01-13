@@ -19,7 +19,7 @@ import jpa.study.book.entity.Team;
  * springdatajpa repository
  */
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 	
 	//@EntityGraph("MemberWithTeam")
 	List<Member> findAll();
