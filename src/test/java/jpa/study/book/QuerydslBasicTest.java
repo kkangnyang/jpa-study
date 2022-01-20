@@ -762,7 +762,7 @@ class QuerydslBasicTest {
 		
 		for (Member member : result) {
 			
-			System.out.println("member1 = " + member1);
+			//System.out.println("member1 = " + member1);
 		}
 		
 	}
